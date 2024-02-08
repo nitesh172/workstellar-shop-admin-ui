@@ -27,12 +27,10 @@ const LanguageAction = () => {
     let listOfTranslationValue: { id: string; value: string }[] = []
     keys.map((key) =>
       key.translationValues.map((translationValue) => {
-        if (translationValue.value !== '') {
-          listOfTranslationValue.push({
-            id: translationValue.id,
-            value: translationValue.value,
-          })
-        }
+        listOfTranslationValue.push({
+          id: translationValue.id,
+          value: translationValue.value,
+        })
       })
     )
     saveValues('translation/admin', {
