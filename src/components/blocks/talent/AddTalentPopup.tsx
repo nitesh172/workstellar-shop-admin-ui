@@ -12,6 +12,7 @@ import { City, Country, State } from 'country-state-city'
 import Button from '@/components/Buttons/Button'
 import { levels, talentSchema, talentUser, workType } from '@/utils/config'
 import { MultiValueInput } from '@/components/Input/MultiValueInput'
+import Image from 'next/image'
 
 const AddUserPopup: React.FC<PopupProps> = (props) => {
   const { close } = props
@@ -34,6 +35,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
     setValues,
     isSubmitting,
     setSubmitting,
+    setFieldValue,
   } = useFormik({
     initialValues: talentUser,
     validationSchema: talentSchema,
@@ -41,16 +43,19 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
       !talentID
         ? createUser('talents/new', {
             ...talentDetails,
-            skills: skills,
             experienceYear: Number(talentDetails.experienceYear),
           })
         : updateUser(`talents/${talentID}`, {
             ...talentDetails,
-            skills: skills,
             experienceYear: Number(talentDetails.experienceYear),
           })
     },
   })
+
+  useEffect(() => {
+    setFieldValue('skills', skills)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [skills])
 
   const { limit, page } = usePaginationContext()
 
@@ -65,6 +70,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
     },
     errorCb: (failed: any) => {
       toast.error(failed)
+      setSubmitting(false)
     },
   })
 
@@ -100,6 +106,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
     },
     errorCb: (failed: any) => {
       toast.error(failed)
+      setSubmitting(false)
     },
   })
 
@@ -114,7 +121,9 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
       onSubmit={handleSubmit}
       className="p-8 bg-white flex flex-col gap-6 shadow-xl rounded-2xl w-full"
     >
-      <div className="text-base font-semibold">Add Employee</div>
+      <div className="text-base font-semibold">
+        {talentID ? 'Edit' : 'Add'} Talent
+      </div>
       <div className="flex flex-col xl:flex-row gap-6 w-full">
         <Textfiled
           label="Full Name"
@@ -155,7 +164,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
       <div className="flex flex-col xl:flex-row gap-6 w-full">
         <Textfiled
           label="Designation"
-          placeholder="Write"
+          placeholder="Software developer"
           type="text"
           value={values}
           name="designation"
@@ -186,7 +195,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
       <div className="flex flex-col xl:flex-row gap-6 w-full">
         <Textfiled
           label="Years of experience"
-          placeholder="Write"
+          placeholder="10"
           type="text"
           value={values}
           name="experienceYear"
@@ -196,7 +205,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           error={errors}
           touched={touched}
         />
-        <Textfiled
+        {/* <Textfiled
           label="Avatar"
           placeholder="person_1"
           type="text"
@@ -207,7 +216,42 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           onBlur={handleBlur}
           error={errors}
           touched={touched}
-        />
+        /> */}
+      </div>
+      <div className="mt-2">
+        <div className="text-black font-bold mb-1">Avatar</div>
+        <div className="flex flex-row flex-wrap gap-2">
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((index) => {
+            return (
+              <div
+                key={index}
+                onClick={() =>
+                  handleChange({
+                    target: { name: 'avatar', value: `person_${index}` },
+                  })
+                }
+                className={`border-2 ${
+                  values.avatar === `person_${index}`
+                    ? 'border-primary'
+                    : 'border-transparent'
+                }`}
+              >
+                <Image
+                  src={`/images/person_${index}.png`}
+                  alt="person_images"
+                  width={48}
+                  height={48}
+                  className="w-12 h-12"
+                />
+              </div>
+            )
+          })}
+          {touched.avatar && errors.avatar ? (
+            <span className="text-xs text-[#F04438] px-2 block">
+              {touched.avatar && errors.avatar}
+            </span>
+          ) : null}
+        </div>
       </div>
       <div className="text-black font-bold mt-2">Location</div>
       <div className="flex flex-col xl:flex-row gap-6 w-full">
@@ -331,6 +375,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
         <Button
           text={talentID ? 'Save' : 'Add'}
           dark
+          submitLoading={isSubmitting}
           type="submit"
           className="bg-primary text-white w-full md:w-fit"
         />

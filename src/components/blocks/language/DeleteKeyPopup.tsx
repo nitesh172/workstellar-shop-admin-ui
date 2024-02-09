@@ -60,7 +60,7 @@ const DeleteKeyPopup: React.FC<PopupProps> = (props) => {
       <div className="text-base font-semibold">Delete Key</div>
       <Textfiled
         label="Key"
-        placeholder="en-us"
+        placeholder="_KEY_NAME_"
         type="text"
         value={values}
         name="key"

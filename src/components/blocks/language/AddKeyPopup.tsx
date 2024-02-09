@@ -60,7 +60,7 @@ const AddKeyPopup: React.FC<PopupProps> = (props) => {
       <div className="text-base font-semibold">Add Key</div>
       <Textfiled
         label="Key"
-        placeholder="en-us"
+        placeholder="_KEY_NAME_"
         type="text"
         value={values}
         name="key"

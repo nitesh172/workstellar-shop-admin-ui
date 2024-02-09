@@ -11,7 +11,7 @@ const RequestAction = () => {
 
   return (
     <div className="flex flex-row items-center justify-between mb-8 md:mb-12">
-      <div className="text-2xl text-black font-medium">Requests</div>
+      <div className="text-2xl text-black font-medium">Contacted Users</div>
       <SearchField
         placeholder="Search"
         onChange={(e) => setSearchTerm(e.target.value)}

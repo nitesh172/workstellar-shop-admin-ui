@@ -37,7 +37,7 @@ export const talentSchema = object().shape({
   headline: string().required("Please write headline can't be empty."),
   level: string().required("Please select level can't be empty."),
   designation: string().required("Please enter designation can't be empty."),
-  avatar: string().required("Please enter avatar can't be empty."),
+  avatar: string().required("Please select avatar is required."),
   user: object().shape({
     email: string()
       .email('Please enter valid email.')

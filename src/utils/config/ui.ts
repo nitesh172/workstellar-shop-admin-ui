@@ -162,7 +162,7 @@ export const SideItemList = [
     icon: 'talent',
   },
   {
-    title: 'Requests',
+    title: 'Contacted Users',
     link: '/requests',
     isDisabled: false,
     icon: 'request',

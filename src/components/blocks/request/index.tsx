@@ -105,11 +105,11 @@ const RequestTable = () => {
           id: 'w-[7%]',
           companyName: 'w-[20%]',
           email: 'w-[20%]',
-          clientType: 'w-[10%]',
-          skills: 'w-[15%]',
-          commitment: 'w-[10%]',
-          onboardPeriod: 'w-[10%]',
-          createdAt: 'w-[15%]',
+          clientType: 'w-[8%]',
+          skills: 'w-[20%]',
+          commitment: 'w-[8%]',
+          onboardPeriod: 'w-[8%]',
+          createdAt: 'w-[10%]',
         }}
       />
       <Pagination />
