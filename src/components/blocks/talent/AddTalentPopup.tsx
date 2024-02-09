@@ -40,6 +40,8 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
     initialValues: talentUser,
     validationSchema: talentSchema,
     onSubmit: (talentDetails) => {
+      console.log(talentDetails)
+      setSubmitting(false)
       !talentID
         ? createUser('talents/new', {
             ...talentDetails,
@@ -56,6 +58,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
     setFieldValue('skills', skills)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [skills])
+  console.log(values)
 
   const { limit, page } = usePaginationContext()
 
@@ -142,6 +145,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           placeholder="john@gmail.com"
           type="text"
           value={values}
+          disabled={talentID ? true : false}
           name="user.email"
           className="flex-1"
           onChange={handleChange}
@@ -205,18 +209,6 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           error={errors}
           touched={touched}
         />
-        {/* <Textfiled
-          label="Avatar"
-          placeholder="person_1"
-          type="text"
-          value={values}
-          className="flex-1"
-          name="avatar"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={errors}
-          touched={touched}
-        /> */}
       </div>
       <div className="mt-2">
         <div className="text-black font-bold mb-1">Avatar</div>

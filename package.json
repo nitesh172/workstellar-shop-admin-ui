@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@lottiefiles/lottie-player": "^2.0.3",
     "@popperjs/core": "^2.11.8",
     "cookies-next": "^4.1.1",
     "country-state-city": "^3.2.1",

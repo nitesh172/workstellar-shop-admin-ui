@@ -20,7 +20,7 @@ const DropDown: React.FC<DropDownProps> = (props) => {
     className,
     primary,
     selectOptionKey,
-    touched
+    touched,
   } = props
 
   const [showDropDownOptions, setShowDropDownOptions] = useState(false)
@@ -83,7 +83,7 @@ const DropDown: React.FC<DropDownProps> = (props) => {
           </div>
           <div className="text-sm capitalize text-black">
             {newOption && availableOptionKey && Object.keys(newOption)
-              ? (newOption[availableOptionKey])?.toString().toLowerCase()
+              ? newOption[availableOptionKey]?.toString().toLowerCase()
               : newOption || 'Select'}
           </div>
         </div>
@@ -119,7 +119,14 @@ const DropDown: React.FC<DropDownProps> = (props) => {
                   key={`available-option-${index}`}
                   onClick={() => {
                     setNewOption(availableOption)
-                    setOption({target: {name: name, value: selectOptionKey ? availableOption[selectOptionKey] : availableOption}})
+                    setOption({
+                      target: {
+                        name: name,
+                        value: selectOptionKey
+                          ? availableOption[selectOptionKey]
+                          : availableOption,
+                      },
+                    })
                   }}
                   className={`py-3 p-5 hover:bg-[#e7e7e8] bg-white w-full flex flex-row gap-3 items-center`}
                 >
@@ -141,11 +148,26 @@ const DropDown: React.FC<DropDownProps> = (props) => {
           </div>
         )}
       </div>
-      {!!name && !!error && touched && error[name] && (
-        <span className={`w-full text-[#FF0000] text-[12px] px-2 py-1`}>
-          {!!touched[name] && error[name]}
-        </span>
-      )}
+      {name &&
+      (!!error[name] ||
+        (!!error[name.split('.')[0]] &&
+          !!error[name.split('.')[0]][name.split('.')[1]])) &&
+      (!!touched[name] ||
+        (!!touched[name.split('.')[0]] &&
+          !!touched[name.split('.')[0]][name.split('.')[1]])) ? (
+        name?.split('.').length > 1 ? (
+          <span className="text-xs text-[#F04438] px-2 block">
+            {touched[name.split('.')[0]][name.split('.')[1]] &&
+              error[name.split('.')[0]][name.split('.')[1]]}
+          </span>
+        ) : (
+          <span className="text-xs text-[#F04438] px-2 block">
+            {touched[name] && error[name]}
+          </span>
+        )
+      ) : !name && touched && error ? (
+        touched && error
+      ) : null}
     </div>
   )
 }

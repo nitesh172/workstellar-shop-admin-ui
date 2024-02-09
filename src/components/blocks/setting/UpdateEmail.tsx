@@ -44,7 +44,7 @@ const UpdateEmail: React.FC<PopupProps> = (props) => {
       onSubmit={handleSubmit}
       className="p-8 bg-white flex flex-col gap-6 shadow-xl rounded-2xl w-full"
     >
-      <div className="text-base font-semibold">Add Employee</div>
+      <div className="text-base font-semibold">Update email</div>
       <Textfiled
         label="New Email ID"
         placeholder="john@gmail.com"

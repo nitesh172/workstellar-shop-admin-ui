@@ -112,6 +112,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
         className="w-auto md:w-[500px] "
         value={values}
         name="email"
+        disabled={userID ? true : false}
         onChange={handleChange}
         onBlur={handleBlur}
         error={errors}

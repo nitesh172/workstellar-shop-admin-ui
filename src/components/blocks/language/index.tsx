@@ -24,6 +24,7 @@ const KeysTable = () => {
     setKeys,
     deleteKeyPopup,
     setDeleteKeyPopup,
+    loading,
   } = useLanguageContext()
 
   const { page, limit } = usePaginationContext()
@@ -56,6 +57,7 @@ const KeysTable = () => {
   return (
     <div className="flex flex-col gap-7">
       <DynamicTable
+        loading={loading}
         data={keys}
         options={{
           fieldFunctions: {

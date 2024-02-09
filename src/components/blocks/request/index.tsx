@@ -8,7 +8,7 @@ import { convertISODate } from '@/utils/API'
 import React, { useEffect, useRef, useState } from 'react'
 
 const RequestTable = () => {
-  const { requests, searchTerm, getRequests } = useRequestContext()
+  const { requests, searchTerm, getRequests, loading } = useRequestContext()
 
   const { page, limit } = usePaginationContext()
 
@@ -28,7 +28,7 @@ const RequestTable = () => {
     !!access &&
       !searchTerm &&
       getRequests(`requests?perPage=${limit}&currentPage=${page}`)
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, page, access, searchTerm])
 
@@ -36,6 +36,7 @@ const RequestTable = () => {
     <div className="flex flex-col gap-7">
       <DynamicTable
         data={requests}
+        loading={loading}
         options={{
           fieldFunctions: {
             id: (request: RequestProps, index: number) => {
@@ -82,7 +83,7 @@ const RequestTable = () => {
               return (
                 <div>
                   {request.onboardPeriod === 'INWEEK'
-                    ? 'WEEK'
+                    ? 'Week'
                     : request.onboardPeriod === 'INMONTH'
                     ? 'Month'
                     : request.onboardPeriod}
@@ -103,12 +104,12 @@ const RequestTable = () => {
         }}
         headersCSS={{
           id: 'w-[7%]',
-          companyName: 'w-[20%]',
+          companyName: 'w-[25%]',
           email: 'w-[20%]',
-          clientType: 'w-[8%]',
+          clientType: 'w-[6%]',
           skills: 'w-[20%]',
-          commitment: 'w-[8%]',
-          onboardPeriod: 'w-[8%]',
+          commitment: 'w-[6%]',
+          onboardPeriod: 'w-[6%]',
           createdAt: 'w-[10%]',
         }}
       />

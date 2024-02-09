@@ -24,6 +24,7 @@ const TalentTable = () => {
     getTalents,
     talent,
     setAddPopup,
+    loading,
   } = useTalentContext()
 
   const { page, limit } = usePaginationContext()
@@ -77,6 +78,7 @@ const TalentTable = () => {
   return (
     <div className="flex flex-col gap-7">
       <DynamicTable
+        loading={loading}
         data={talents}
         options={{
           fieldFunctions: {
@@ -128,7 +130,7 @@ const TalentTable = () => {
                 <div className="flex flex-row flex-wrap gap-2">
                   {!!talent.skills &&
                     talent.skills.length &&
-                    talent.skills.map((skill, index) => {
+                    talent.skills.slice(0, 4).map((skill, index) => {
                       return (
                         <div key={skill.id}>
                           {skill.name}
@@ -136,6 +138,11 @@ const TalentTable = () => {
                         </div>
                       )
                     })}
+                  {talent.skills.length > 4 && (
+                    <div className="font-bold">{`${
+                      talent.skills.length - 4
+                    }+ more`}</div>
+                  )}
                 </div>
               )
             },
@@ -147,7 +154,7 @@ const TalentTable = () => {
           designation: 'Designation',
           level: 'Level',
           paymentType: 'Payment',
-          experienceYear: 'Years of Exp',
+          experienceYear: 'YOE',
           skills: 'Skillsets',
           action: 'Action',
         }}
@@ -156,9 +163,9 @@ const TalentTable = () => {
           entityName: 'w-[20%]',
           designation: 'w-[15%]',
           level: 'w-[15%]',
-          paymentType: 'w-[10%]',
-          experienceYear: 'w-[7%]',
-          skills: 'w-[33%]',
+          paymentType: 'w-[8%]',
+          experienceYear: 'w-[6%]',
+          skills: 'w-[36%]',
           action: 'w-[4%]',
         }}
       />

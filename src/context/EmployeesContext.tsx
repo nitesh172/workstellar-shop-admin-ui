@@ -11,6 +11,7 @@ export type EmployeeContextType = {
   confirmBanPopup: boolean
   setConfirmBanPopup: (value: boolean) => void
   addPopup: boolean
+  loading: boolean
   setAddPopup: (value: boolean) => void
   searchTerm: string
   setSearchTerm: (value: string) => void
@@ -34,6 +35,7 @@ export const EmployeeProvider = (props: EmployeeProviderProps) => {
   const { children } = props
   const [confirmBanPopup, setConfirmBanPopup] = useState<boolean>(false)
   const [addPopup, setAddPopup] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(true)
   const [users, setUsers] = useState<UserProps[]>([])
   const [user, setUser] = useState<UserProps | null>(null)
   const [searchTerm, setSearchTerm] = useState<string>('')
@@ -51,9 +53,11 @@ export const EmployeeProvider = (props: EmployeeProviderProps) => {
       setTotalPages(resp.totalPage)
       setTotalCount(resp.totalItems)
       setIsLoading(false)
+      setLoading(false)
     },
     errorCb: (failed: any) => {
       toast.error(failed)
+      setLoading(false)
     },
   })
 
@@ -64,6 +68,7 @@ export const EmployeeProvider = (props: EmployeeProviderProps) => {
     confirmBanPopup,
     setConfirmBanPopup,
     addPopup,
+    loading,
     setAddPopup,
     searchTerm,
     setSearchTerm,

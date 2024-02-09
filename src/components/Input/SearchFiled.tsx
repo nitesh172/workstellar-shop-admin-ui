@@ -21,7 +21,7 @@ const Textfiled = (props: SearchFiledProps) => {
           }`}
           autoComplete="off"
         />
-        <Image src={'/images/search.svg'} alt="" width={18} height={18} />
+        <Image src={'/images/search.svg'} alt="" width={24} height={24} />
       </div>
       {error && error !== '' ? (
         <span className="text-xs text-[#F04438] block">{error}</span>

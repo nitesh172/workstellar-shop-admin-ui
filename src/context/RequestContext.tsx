@@ -10,6 +10,7 @@ export type RequestContextType = {
   setSearchTerm: (value: string) => void
   getRequests: Function
   requests: RequestProps[]
+  loading: boolean
 }
 
 const RequestContext: any = createContext<RequestContextType>(
@@ -28,6 +29,7 @@ export const RequestProvider = (props: RequestProviderProps) => {
   const { children } = props
   const [requests, setRequests] = useState<RequestProps[]>([])
   const [searchTerm, setSearchTerm] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(true)
 
   const { setTotalCount, setTotalPages, setPage, setLimit, setIsLoading } =
     usePaginationContext()
@@ -42,9 +44,11 @@ export const RequestProvider = (props: RequestProviderProps) => {
       setTotalPages(resp.totalPage)
       setTotalCount(resp.totalItems)
       setIsLoading(false)
+      setLoading(false)
     },
     errorCb: (failed: any) => {
       toast.error(failed)
+      setLoading(false)
     },
   })
 
@@ -54,6 +58,7 @@ export const RequestProvider = (props: RequestProviderProps) => {
     setSearchTerm,
     getRequests,
     requests,
+    loading,
   }
 
   return (

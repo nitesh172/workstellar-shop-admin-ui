@@ -18,6 +18,7 @@ export type LanguageContextType = {
   setDeleteKeyPopup: (value: boolean) => void
   deleteKeyPopup: boolean,
   setKeys: (keys: keyProps[]) => void
+  loading: boolean
 }
 
 const LanguageContext: any = createContext<LanguageContextType>(
@@ -38,6 +39,7 @@ export const LanguageProvider = (props: LanguageProviderProps) => {
   const [addKeyPopup, setAddKeyPopup] = useState<boolean>(false)
   const [deleteKeyPopup, setDeleteKeyPopup] = useState<boolean>(false)
   const [keys, setKeys] = useState<keyProps[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
 
   const [searchTerm, setSearchTerm] = useState<string>('')
 
@@ -61,10 +63,12 @@ export const LanguageProvider = (props: LanguageProviderProps) => {
       setTotalPages(resp.totalPage)
       setTotalCount(resp.totalItems)
       setIsLoading(false)
+      setLoading(false)
     },
     errorCb: (failed: any) => {
       toast.error(failed)
       setIsLoading(false)
+      setLoading(false)
     },
   })
 
@@ -90,6 +94,7 @@ export const LanguageProvider = (props: LanguageProviderProps) => {
     setAddKeyPopup,
     searchTerm,
     setSearchTerm,
+    loading,
     getkeys,
     keys,
     saveValues,

@@ -15,7 +15,7 @@ const TextField: React.FC<TextFieldProps> = (props) => {
     error,
     touched,
     onkeyPressed,
-    disabled = false
+    disabled = false,
   } = props
 
   return (
@@ -38,7 +38,9 @@ const TextField: React.FC<TextFieldProps> = (props) => {
           }}
           value={
             name &&
-            (!!value[name] || !!value[name.split('.')[0]] && !!value[name.split('.')[0]][name.split('.')[1]])
+            (!!value[name] ||
+              (!!value[name.split('.')[0]] &&
+                !!value[name.split('.')[0]][name.split('.')[1]]))
               ? name?.split('.').length > 1
                 ? value[name.split('.')[0]][name.split('.')[1]]
                 : value[name]
@@ -53,10 +55,25 @@ const TextField: React.FC<TextFieldProps> = (props) => {
           placeholder={placeholder}
         />
       </div>
-      {name && error && touched && error[name] !== '' ? (
-        <span className="text-xs text-[#F04438] px-2 block">
-          {touched[name] && error[name]}
-        </span>
+      {name &&
+      (!!error[name] ||
+        (!!error[name.split('.')[0]] &&
+          !!error[name.split('.')[0]][name.split('.')[1]])) &&
+      (!!touched[name] ||
+        (!!touched[name.split('.')[0]] &&
+          !!touched[name.split('.')[0]][name.split('.')[1]])) ? (
+        name?.split('.').length > 1 ? (
+          <span className="text-xs text-[#F04438] px-2 block">
+            {touched[name.split('.')[0]][name.split('.')[1]] &&
+              error[name.split('.')[0]][name.split('.')[1]]}
+          </span>
+        ) : (
+          <span className="text-xs text-[#F04438] px-2 block">
+            {touched[name] && error[name]}
+          </span>
+        )
+      ) : !name && touched && error ? (
+        touched && error
       ) : null}
     </div>
   )

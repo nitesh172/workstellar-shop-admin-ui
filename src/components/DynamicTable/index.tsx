@@ -1,8 +1,16 @@
 import { DynamicTableProps } from '@/types'
 import React from 'react'
+import LottieAnimation from '../LottieAnimation'
 
 const DynamicTable: React.FC<DynamicTableProps> = (props) => {
-  const { data, headers, options, headersCSS, CustomRow } = props
+  const {
+    data,
+    headers,
+    options,
+    headersCSS,
+    CustomRow,
+    loading = true,
+  } = props
 
   let fieldOrder: any = []
   if (!Array.isArray(!!headers && headers)) {
@@ -15,7 +23,7 @@ const DynamicTable: React.FC<DynamicTableProps> = (props) => {
     <div className='border border-pShadeTwo overflow-auto rounded-2xl [-ms-overflow-style:"none"] [scrollbar-width:"none"]'>
       {CustomRow && <CustomRow />}
       <table className="w-full">
-        <thead className='bg-chipColor'>
+        <thead className="bg-chipColor">
           <tr>
             {fieldOrder.map((e: any, inx: any) => {
               let title
@@ -93,6 +101,17 @@ const DynamicTable: React.FC<DynamicTableProps> = (props) => {
             })}
         </tbody>
       </table>
+      {
+       !data.length && !!loading ? (
+          <div className="flex flex-col items-center justify-center h-[500px] w-full">
+            <LottieAnimation />
+          </div>
+        ) : !data.length ? (
+          <div className="flex flex-col items-center justify-center h-[500px] w-full">
+            <div>No Data</div>
+          </div> 
+        ) : null
+      }
     </div>
   )
 }

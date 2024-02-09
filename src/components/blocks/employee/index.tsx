@@ -24,6 +24,7 @@ const EmployeeTable = () => {
     getUsers,
     user,
     setAddPopup,
+    loading,
   } = useEmployeeContext()
 
   const { page, limit } = usePaginationContext()
@@ -76,6 +77,7 @@ const EmployeeTable = () => {
     <div className="flex flex-col gap-7">
       <DynamicTable
         data={users}
+        loading={loading}
         options={{
           fieldFunctions: {
             id: (user: UserProps, index: number) => {

@@ -16,6 +16,7 @@ export type TalentContextType = {
   setSearchTerm: (value: string) => void
   getTalents: Function
   talents: TalentProps[]
+  loading: boolean
 }
 
 const TalentContext: any = createContext<TalentContextType>(
@@ -37,6 +38,7 @@ export const TalentProvider = (props: TalentProviderProps) => {
   const [talents, setTalents] = useState<TalentProps[]>([])
   const [talent, setTalent] = useState<TalentProps | null>(null)
   const [searchTerm, setSearchTerm] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(true)
 
   const { setTotalCount, setTotalPages, setPage, setLimit, setIsLoading } =
     usePaginationContext()
@@ -51,9 +53,12 @@ export const TalentProvider = (props: TalentProviderProps) => {
       setTotalPages(resp.totalPage)
       setTotalCount(resp.totalItems)
       setIsLoading(false)
+      setLoading(false)
     },
     errorCb: (failed: any) => {
       toast.error(failed)
+      setIsLoading(false)
+      setLoading(false)
     },
   })
 
@@ -66,6 +71,7 @@ export const TalentProvider = (props: TalentProviderProps) => {
     addPopup,
     setAddPopup,
     searchTerm,
+    loading,
     setSearchTerm,
     getTalents,
     talents,

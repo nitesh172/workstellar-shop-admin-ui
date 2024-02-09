@@ -28,6 +28,7 @@ export interface DynamicTableProps {
   options?: { fieldFunctions?: any }
   headersCSS?: any
   CustomRow?: () => React.JSX.Element
+  loading?: boolean
 }
 
 export type ButtonProps = {
