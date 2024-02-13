@@ -46,10 +46,20 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
         ? createUser('talents/new', {
             ...talentDetails,
             experienceYear: Number(talentDetails.experienceYear),
+            user: {
+              ...talentDetails.user,
+              state: !talentDetails.user.city ? 'NA' : talentDetails.user.city,
+              city: !talentDetails.user.state ? 'NA' : talentDetails.user.state,
+            },
           })
         : updateUser(`talents/${talentID}`, {
             ...talentDetails,
             experienceYear: Number(talentDetails.experienceYear),
+            user: {
+              ...talentDetails.user,
+              state: !talentDetails.user.city ? 'NA' : talentDetails.user.city,
+              city: !talentDetails.user.state ? 'NA' : talentDetails.user.state,
+            },
           })
     },
   })
@@ -91,8 +101,14 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
         user: talent.user,
         avatar: talent.avatar,
       })
-      let countryCode = Country.getAllCountries().find((country) => country.name === talent.user.country)?.isoCode || ''
-      let stateCode = State.getStatesOfCountry(countryCode).find((state) => state.name === talent.user.state)?.isoCode || ''
+      let countryCode =
+        Country.getAllCountries().find(
+          (country) => country.name === talent.user.country
+        )?.isoCode || ''
+      let stateCode =
+        State.getStatesOfCountry(countryCode).find(
+          (state) => state.name === talent.user.state
+        )?.isoCode || ''
       setCountryCode(countryCode)
       setStateCode(stateCode)
       setSkills(talent.skills)
@@ -262,6 +278,8 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
             handleChange({
               target: { name: e.target.name, value: e.target.value.name },
             })
+            setFieldValue('user.state', '')
+            setFieldValue('user.city', '')
           }}
           onBlur={handleBlur}
           error={errors}
@@ -273,13 +291,14 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           primary
           label="State"
           name="user.state"
-          option={values.user.state ? { name: values.user.state } : null}
+          option={values.user.state && values.user.state !== 'NA' ? { name: values.user.state } : null}
           availableOptions={State.getStatesOfCountry(countryCode)}
           setOption={(e: any) => {
             setStateCode(e.target.value.isoCode)
             handleChange({
               target: { name: e.target.name, value: e.target.value.name },
             })
+            setFieldValue('user.city', '')
           }}
           onBlur={handleBlur}
           error={errors}
@@ -291,7 +310,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           availableOptionKey="name"
           primary
           className="flex-1"
-          option={values.user.city ? { name: values.user.city } : null}
+          option={values.user.city && values.user.city !== 'NA' ? { name: values.user.city } : null}
           label="City"
           name="user.city"
           availableOptions={City.getCitiesOfState(countryCode, stateCode)}

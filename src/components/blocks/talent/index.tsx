@@ -90,7 +90,7 @@ const TalentTable = () => {
                 <div className="flex flex-col">
                   <div>{talent?.user?.entityName}</div>
                   <div className="text-grey">
-                    {talent?.user?.country}, {talent?.user?.city}
+                    {talent?.user?.country}{talent?.user?.city && talent?.user?.city !== 'NA' && `, ${talent?.user?.city}`}
                   </div>
                 </div>
               )

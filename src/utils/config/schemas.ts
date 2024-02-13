@@ -23,8 +23,6 @@ export const UserSchema = object().shape({
     .matches(/^[a-zA-Z0-9 .ÆØÅæøå&]{1,40}$/, 'Invalid characters used'),
   role: string().required("Please select user type can't be empty."),
   country: string().required("Please select country can't be empty."),
-  state: string().required("Please select state can't be empty."),
-  city: string().required("Please select city can't be empty."),
   zipcode: string()
     .required("Please select zipcode can't be empty.")
     .matches(/^[a-zA-Z0-9 .-ÆØÅæøå]{1,40}$/, 'Invalid characters used')
@@ -47,8 +45,6 @@ export const talentSchema = object().shape({
       .max(40, 'Exceeding maximum character limit')
       .matches(/^[a-zA-Z0-9 .ÆØÅæøå&]{1,40}$/, 'Invalid characters used'),
     country: string().required("Please select country can't be empty."),
-    state: string().required("Please select state can't be empty."),
-    city: string().required("Please select city can't be empty."),
     zipcode: string()
       .required("Please select zipcode can't be empty.")
       .matches(/^[a-zA-Z0-9 .-ÆØÅæøå]{1,40}$/, 'Invalid characters used')

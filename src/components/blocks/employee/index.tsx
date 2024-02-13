@@ -88,7 +88,7 @@ const EmployeeTable = () => {
                 <div className="flex flex-col">
                   <div>{user.entityName}</div>
                   <div className="text-grey">
-                    {user.country}, {user.city}
+                    {user.country}{!!user.city && user.city !== 'NA' && `, ${user.city}`}
                   </div>
                 </div>
               )

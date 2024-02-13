@@ -31,13 +31,22 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
     setValues,
     isSubmitting,
     setSubmitting,
+    setFieldValue,
   } = useFormik({
     initialValues: profileUser,
     validationSchema: UserSchema,
     onSubmit: (userDetails) =>
       !userID
-        ? createUser('users/new', userDetails)
-        : updateUser(`users/${user?.id}`, userDetails),
+        ? createUser('users/new', {
+            ...userDetails,
+            state: !userDetails.city ? 'NA' : userDetails.city,
+            city: !userDetails.state ? 'NA' : userDetails.state,
+          })
+        : updateUser(`users/${user?.id}`, {
+            ...userDetails,
+            state: !userDetails.city ? 'NA' : userDetails.city,
+            city: !userDetails.state ? 'NA' : userDetails.state,
+          }),
   })
 
   const { limit, page } = usePaginationContext()
@@ -61,8 +70,14 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
     doneCb: (resp: UserProps) => {
       if (!resp) return
       setValues(resp)
-      let countryCode = Country.getAllCountries().find((country) => country.name === resp.country)?.isoCode || ''
-      let stateCode = State.getStatesOfCountry(countryCode).find((state) => state.name === resp.state)?.isoCode || ''
+      let countryCode =
+        Country.getAllCountries().find(
+          (country) => country.name === resp.country
+        )?.isoCode || ''
+      let stateCode =
+        State.getStatesOfCountry(countryCode).find(
+          (state) => state.name === resp.state
+        )?.isoCode || ''
       setCountryCode(countryCode)
       setStateCode(stateCode)
     },
@@ -96,7 +111,9 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
       onSubmit={handleSubmit}
       className="p-8 bg-white flex flex-col gap-6 shadow-xl rounded-2xl w-full"
     >
-      <div className="text-base font-semibold">{userID ? 'Edit' : 'Add'} Employee</div>
+      <div className="text-base font-semibold">
+        {userID ? 'Edit' : 'Add'} Employee
+      </div>
       <Textfiled
         label="Full Name"
         placeholder="John wick"
@@ -151,6 +168,8 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
             handleChange({
               target: { name: e.target.name, value: e.target.value.name },
             })
+            setFieldValue('state', '')
+            setFieldValue('city', '')
           }}
           onBlur={handleBlur}
           error={errors}
@@ -162,13 +181,18 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           primary
           label="State"
           name="state"
-          option={values.state ? { name: values.state } : null}
+          option={
+            values.state && values.state !== 'NA'
+              ? { name: values.state }
+              : null
+          }
           availableOptions={State.getStatesOfCountry(countryCode)}
           setOption={(e: any) => {
             setStateCode(e.target.value.isoCode)
             handleChange({
               target: { name: e.target.name, value: e.target.value.name },
             })
+            setFieldValue('city', '')
           }}
           onBlur={handleBlur}
           error={errors}
@@ -180,7 +204,9 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           availableOptionKey="name"
           primary
           className="flex-1"
-          option={values.city ? { name: values.city } : null}
+          option={
+            values.city && values.city !== 'NA' ? { name: values.city } : null
+          }
           label="City"
           name="city"
           availableOptions={City.getCitiesOfState(countryCode, stateCode)}
