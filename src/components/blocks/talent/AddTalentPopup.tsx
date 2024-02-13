@@ -91,6 +91,10 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
         user: talent.user,
         avatar: talent.avatar,
       })
+      let countryCode = Country.getAllCountries().find((country) => country.name === talent.user.country)?.isoCode || ''
+      let stateCode = State.getStatesOfCountry(countryCode).find((state) => state.name === talent.user.state)?.isoCode || ''
+      setCountryCode(countryCode)
+      setStateCode(stateCode)
       setSkills(talent.skills)
     },
     errorCb: (failed: any) => {

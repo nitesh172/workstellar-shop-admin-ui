@@ -12,7 +12,7 @@ import { object, string } from 'yup'
 
 const AddLanguagePopup: React.FC<PopupProps> = (props) => {
   const { close } = props
-  const { getkeys, searchTerm } = useLanguageContext()
+  const { getkeys, searchTerm, fetchLanguages } = useLanguageContext()
 
   const {
     values,
@@ -42,6 +42,7 @@ const AddLanguagePopup: React.FC<PopupProps> = (props) => {
       getkeys(
         `translation/keys?perPage=${limit}&currentPage=${page}&searchString=${searchTerm}`
       )
+      fetchLanguages('translation/languages/all')
       setSubmitting(false)
       close()
       toast.success('Language added successfully.')

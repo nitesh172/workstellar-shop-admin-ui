@@ -10,7 +10,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import TextFieldSmall from '@/components/Input/TextFieldSmall'
 import AddLanguagePopup from './AddLanguagePopup'
 import AddKeyPopup from './AddKeyPopup'
-import DeleteKeyPopup from './DeleteKeyPopup'
+import DeleteLanguagePopup from './DeleteLanguagePopup'
+import { usePopper } from '@/hooks/use-popper'
+import Image from 'next/image'
+import ConfirmationPopup from '@/components/ConfirmationPopup'
 
 const KeysTable = () => {
   const {
@@ -24,6 +27,9 @@ const KeysTable = () => {
     setKeys,
     deleteKeyPopup,
     setDeleteKeyPopup,
+    deleteLanguagePopup,
+    setDeleteLanguagePopup,
+    deleteKey,
     loading,
   } = useLanguageContext()
 
@@ -36,7 +42,9 @@ const KeysTable = () => {
 
   const closeLanguagePopup = () => setLanguagePopup(false)
 
-  const closeDeleteKeyPopup = () => setDeleteKeyPopup(false)
+  const closeDeleteLanguagePopup = () => setDeleteLanguagePopup(false)
+
+  const closeDeleteKeyPopup = () => setDeleteKeyPopup({ id: '', popup: false })
 
   useEffect(() => {
     if (!initialized.current) {
@@ -105,6 +113,9 @@ const KeysTable = () => {
                 </div>
               )
             },
+            action: (key: keyProps) => {
+              return <ActionMenu keyItem={key} />
+            },
             values: (key: keyProps, index: number) => {
               return (
                 <div className="flex flex-col gap-2">
@@ -167,13 +178,15 @@ const KeysTable = () => {
           language: 'Language',
           values: 'Translation value',
           createdAt: 'Created date',
+          action: 'Action',
         }}
         headersCSS={{
           id: 'w-[7%]',
           key: 'w-[20%]',
           language: 'w-[15%]',
-          values: 'w-[48%]',
+          values: 'w-[41%]',
           createdAt: 'w-[10%]',
+          action: 'w-[7%]',
         }}
       />
       <Pagination />
@@ -183,9 +196,56 @@ const KeysTable = () => {
       <PopupEncloser close={closeLanguagePopup} show={languagePopup}>
         <AddLanguagePopup close={closeLanguagePopup} />
       </PopupEncloser>
-      <PopupEncloser close={closeDeleteKeyPopup} show={deleteKeyPopup}>
-        <DeleteKeyPopup close={closeDeleteKeyPopup} />
+      <PopupEncloser close={closeDeleteKeyPopup} show={deleteKeyPopup.popup}>
+        <ConfirmationPopup
+          close={closeDeleteKeyPopup}
+          confirm={() => deleteKey(`translation/key/${deleteKeyPopup.id}`)}
+          title="Confirmation required"
+          content="Are you sure you want to proceed with this action?"
+        />
       </PopupEncloser>
+      <PopupEncloser
+        close={closeDeleteLanguagePopup}
+        show={deleteLanguagePopup}
+      >
+        <DeleteLanguagePopup close={closeDeleteLanguagePopup} />
+      </PopupEncloser>
+    </div>
+  )
+}
+
+type ActionProps = {
+  keyItem: keyProps
+}
+
+const ActionMenu: React.FC<ActionProps> = (props) => {
+  const { keyItem } = props
+  const { setDeleteKeyPopup } = useLanguageContext()
+
+  const open = () => setDeleteKeyPopup({ id: keyItem.key, popup: true })
+
+  let [trigger, container] = usePopper({
+    placement: 'bottom-start',
+    strategy: 'fixed',
+    modifiers: [{ name: 'offset', options: { offset: [0, 10] } }],
+  })
+
+  return (
+    <div className="py-3 text-left text-14 relative group cursor-pointer">
+      <span ref={trigger}>
+        <Image src="/images/dots.svg" alt="" width={24} height={24} />
+      </span>
+      <ul
+        ref={container}
+        className="hidden bg-white absolute -left-10 -mt-1 space-y-2 group-hover:block p-2 rounded-lg shadow-lg shadow-grey-shade-0/10 group-hover:bg-grey-shade-14 z-50"
+      >
+        <li
+          onClick={() => open()}
+          className="px-4 py-2 hover:bg-chipColor rounded-md"
+        >
+          Delete
+        </li>
+      </ul>
     </div>
   )
 }

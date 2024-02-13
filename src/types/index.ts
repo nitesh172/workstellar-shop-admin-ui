@@ -271,3 +271,12 @@ export type MultiValueInputProps = {
   handleAdd: (value: any) => void
   placeholder?: string
 }
+
+export type LanguageProps = {
+  id: string
+  code: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type LanguagesResponseProps = LanguageProps[]

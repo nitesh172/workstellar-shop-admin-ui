@@ -1,7 +1,7 @@
 'use client'
 import { usePaginationContext } from '@/context/PaginationContext'
 import { useEmployeeContext } from '@/context/EmployeesContext'
-import { HttpMethod, PopupProps } from '@/types'
+import { HttpMethod, PopupProps, UserProps } from '@/types'
 import { useCaller } from '@/utils/API'
 import { useFormik } from 'formik'
 import React, { useEffect, useState } from 'react'
@@ -58,9 +58,13 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
 
   const { execute: fetchUser } = useCaller({
     method: HttpMethod.GET,
-    doneCb: (resp: any) => {
+    doneCb: (resp: UserProps) => {
       if (!resp) return
       setValues(resp)
+      let countryCode = Country.getAllCountries().find((country) => country.name === resp.country)?.isoCode || ''
+      let stateCode = State.getStatesOfCountry(countryCode).find((state) => state.name === resp.state)?.isoCode || ''
+      setCountryCode(countryCode)
+      setStateCode(stateCode)
     },
     errorCb: (failed: any) => {
       toast.error(failed)

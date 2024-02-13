@@ -2,7 +2,7 @@
 import { createContext, ReactNode, useContext, useState } from 'react'
 import { usePaginationContext } from './PaginationContext'
 import { useCaller } from '@/utils/API'
-import { HttpMethod, keyProps, KeysResponseProps } from '@/types'
+import { HttpMethod, keyProps, KeysResponseProps, LanguageProps, LanguagesResponseProps } from '@/types'
 import toast from 'react-hot-toast'
 
 export type LanguageContextType = {
@@ -15,10 +15,15 @@ export type LanguageContextType = {
   getkeys: Function
   saveValues: Function
   keys: keyProps[]
-  setDeleteKeyPopup: (value: boolean) => void
-  deleteKeyPopup: boolean,
+  setDeleteLanguagePopup: (value: boolean) => void
+  deleteLanguagePopup: boolean
+  setDeleteKeyPopup: (value: { id: string; popup: boolean }) => void
+  deleteKeyPopup: { id: string; popup: boolean }
   setKeys: (keys: keyProps[]) => void
   loading: boolean
+  fetchLanguages: Function
+  deleteKey: Function
+  languages: LanguageProps[]
 }
 
 const LanguageContext: any = createContext<LanguageContextType>(
@@ -36,8 +41,13 @@ export const useLanguageContext = () => {
 export const LanguageProvider = (props: LanguageProviderProps) => {
   const { children } = props
   const [languagePopup, setLanguagePopup] = useState<boolean>(false)
+  const [languages, setLanguages] = useState<LanguageProps[]>([])
   const [addKeyPopup, setAddKeyPopup] = useState<boolean>(false)
-  const [deleteKeyPopup, setDeleteKeyPopup] = useState<boolean>(false)
+  const [deleteLanguagePopup, setDeleteLanguagePopup] = useState<boolean>(false)
+  const [deleteKeyPopup, setDeleteKeyPopup] = useState<{
+    popup: boolean
+    id: string
+  }>({ popup: false, id: '' })
   const [keys, setKeys] = useState<keyProps[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
@@ -52,6 +62,32 @@ export const LanguageProvider = (props: LanguageProviderProps) => {
     limit,
     page,
   } = usePaginationContext()
+
+  const { execute: fetchLanguages } = useCaller({
+    method: HttpMethod.GET,
+    doneCb: (resp: LanguagesResponseProps) => {
+      if (!resp) return
+      setLanguages(resp)
+    },
+    errorCb: (failed: any) => {
+      toast.error(failed)
+    },
+  })
+
+  const { execute: deleteKey } = useCaller({
+    method: HttpMethod.DELETE,
+    doneCb: (resp: any) => {
+      if (!resp) return
+      getkeys(
+        `translation/keys?perPage=${limit}&currentPage=${page}&searchString=${searchTerm}`
+      )
+      setDeleteKeyPopup({id: "", popup: false})
+      toast.success('Key delete successfully.')
+    },
+    errorCb: (failed: any) => {
+      toast.error(failed)
+    },
+  })
 
   const { execute: getkeys } = useCaller({
     method: HttpMethod.GET,
@@ -100,7 +136,12 @@ export const LanguageProvider = (props: LanguageProviderProps) => {
     saveValues,
     setDeleteKeyPopup,
     deleteKeyPopup,
-    setKeys
+    setDeleteLanguagePopup,
+    deleteLanguagePopup,
+    setKeys,
+    fetchLanguages,
+    languages,
+    deleteKey
   }
 
   return (

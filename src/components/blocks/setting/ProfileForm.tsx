@@ -1,7 +1,6 @@
 'use client'
 import { useAuthContext } from '@/context/AuthContext'
 import { profileUser } from '@/utils/config'
-import { deleteCookie } from 'cookies-next'
 import { useFormik } from 'formik'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
@@ -17,13 +16,7 @@ const DropDown = dynamic(() => import('@/components/Dropdown/Dropdown'))
 const TextField = dynamic(() => import('@/components/Input/TextField'))
 
 const ProfileForm = () => {
-  const {
-    currentUser,
-    isAuthenticated,
-    setIsAuthenticated,
-    setPath,
-    fetchUser,
-  } = useAuthContext()
+  const { currentUser, isAuthenticated, setPath, fetchUser } = useAuthContext()
 
   const router = useRouter()
 
@@ -210,15 +203,6 @@ const ProfileForm = () => {
             submitLoading={isSubmitting}
             dark
             className="w-full md:w-fit lg:w-full xl:w-fit"
-          />
-          <Button
-            text="Log out"
-            type="button"
-            onClick={() => {
-              setIsAuthenticated(false)
-              deleteCookie('workStellarToken')
-            }}
-            className="w-full min-[425px]:w-auto"
           />
         </div>
       </form>

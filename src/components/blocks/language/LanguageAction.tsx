@@ -14,11 +14,11 @@ const LanguageAction = () => {
     keys,
     saveValues,
     setLanguagePopup,
-    setDeleteKeyPopup,
+    setDeleteLanguagePopup,
   } = useLanguageContext()
 
   const openAddKeyPoup = () => setAddKeyPopup(true)
-  const openDeleteKeyPopup = () => setDeleteKeyPopup(true)
+  const openDeleteLanguagePopup = () => setDeleteLanguagePopup(true)
   const openAddLanguagePopup = () => setLanguagePopup(true)
 
   const { limit, page } = usePaginationContext()
@@ -76,7 +76,7 @@ const LanguageAction = () => {
         />
         <Button
           text="Delete"
-          onClick={openDeleteKeyPopup}
+          onClick={openDeleteLanguagePopup}
           dark
           className="rounded-lg p-4 bg-black text-white"
         />
