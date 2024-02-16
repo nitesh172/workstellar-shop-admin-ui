@@ -143,8 +143,6 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
 
   useEffect(() => {
     !!talentID && fetchUser(`talents/${talentID}`)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [talentID])
 
   return (

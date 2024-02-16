@@ -63,16 +63,12 @@ const TalentTable = () => {
       initialized.current = true
       setAccess(true)
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     !!access &&
       !searchTerm &&
       getTalents(`talents?perPage=${limit}&currentPage=${page}`)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, page, access, searchTerm])
 
   return (

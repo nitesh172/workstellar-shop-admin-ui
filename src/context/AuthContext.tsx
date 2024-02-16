@@ -60,8 +60,6 @@ export const AuthProvider = (props: AuthProviderProps) => {
       setIsAuthenticated(true)
       userToken && !!isAuthenticated && fetchUser('users/me')
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
   const defaultContext: AuthContextType = {

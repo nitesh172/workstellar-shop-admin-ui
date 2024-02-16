@@ -25,8 +25,6 @@ const LoginForm = () => {
         router.replace('/')
       }
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
   const navigateToForgotPassword = () => router.push('/forgot-password')
