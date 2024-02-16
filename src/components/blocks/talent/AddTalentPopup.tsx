@@ -21,7 +21,9 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
   const [countryCode, setCountryCode] = useState<string>('')
   const [stateCode, setStateCode] = useState<string>('')
   const [singleValue, setSingleValue] = useState<string>('')
-  const [skills, setSkills] = useState<{ id: string; name: string }[]>([])
+  const [skills, setSkills] = useState<
+    { id: string; name: string; rating: number }[]
+  >([])
 
   let talentID = talent?.id || ''
 
@@ -40,12 +42,17 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
     initialValues: talentUser,
     validationSchema: talentSchema,
     onSubmit: (talentDetails) => {
-      console.log(talentDetails)
       setSubmitting(false)
+      if (
+        skills.filter((skill) => skill.rating > 0 && skill.rating <= 10)
+          .length === 0
+      )
+        return
       !talentID
         ? createUser('talents/new', {
             ...talentDetails,
             experienceYear: Number(talentDetails.experienceYear),
+            rating: Number(talentDetails.rating),
             user: {
               ...talentDetails.user,
               state: !talentDetails.user.city ? 'NA' : talentDetails.user.city,
@@ -55,6 +62,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
         : updateUser(`talents/${talentID}`, {
             ...talentDetails,
             experienceYear: Number(talentDetails.experienceYear),
+            rating: Number(talentDetails.rating),
             user: {
               ...talentDetails.user,
               state: !talentDetails.user.city ? 'NA' : talentDetails.user.city,
@@ -68,7 +76,6 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
     setFieldValue('skills', skills)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [skills])
-  console.log(values)
 
   const { limit, page } = usePaginationContext()
 
@@ -100,6 +107,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
         paymentType: talent.paymentType,
         user: talent.user,
         avatar: talent.avatar,
+        rating: talent.rating.toString()
       })
       let countryCode =
         Country.getAllCountries().find(
@@ -229,6 +237,18 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           error={errors}
           touched={touched}
         />
+        <Textfiled
+          label="Rating"
+          placeholder="0.0"
+          type="string"
+          value={values}
+          name="rating"
+          className="flex-1"
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={errors}
+          touched={touched}
+        />
       </div>
       <div className="mt-2">
         <div className="text-black font-bold mb-1">Avatar</div>
@@ -291,7 +311,11 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           primary
           label="State"
           name="user.state"
-          option={values.user.state && values.user.state !== 'NA' ? { name: values.user.state } : null}
+          option={
+            values.user.state && values.user.state !== 'NA'
+              ? { name: values.user.state }
+              : null
+          }
           availableOptions={State.getStatesOfCountry(countryCode)}
           setOption={(e: any) => {
             setStateCode(e.target.value.isoCode)
@@ -310,7 +334,11 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
           availableOptionKey="name"
           primary
           className="flex-1"
-          option={values.user.city && values.user.city !== 'NA' ? { name: values.user.city } : null}
+          option={
+            values.user.city && values.user.city !== 'NA'
+              ? { name: values.user.city }
+              : null
+          }
           label="City"
           name="user.city"
           availableOptions={City.getCitiesOfState(countryCode, stateCode)}
@@ -371,7 +399,7 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
       <MultiValueInput
         handleAdd={() => {
           let tempSkills = [...skills]
-          tempSkills.push({ name: singleValue, id: '' })
+          tempSkills.push({ name: singleValue, id: '', rating: 0 })
           setSkills(tempSkills)
           setSingleValue('')
         }}
@@ -386,6 +414,31 @@ const AddUserPopup: React.FC<PopupProps> = (props) => {
         values={skills.map((skill) => skill.name)}
         label="Enter skills"
       />
+      <div className="text-black font-bold mt-2">Skill Level</div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+        {skills.map((skill, index) => (
+          <Textfiled
+            label={skill.name}
+            key={skill.id}
+            placeholder="0.0"
+            type="number"
+            value={skill.rating}
+            className=""
+            onChange={(e) => {
+              let tempSkills = [...skills]
+              tempSkills[index].rating = Number(e.target.value)
+              setSkills(tempSkills)
+            }}
+            error={
+              skills[index].rating > 0 && skills[index].rating <= 10
+                ? ''
+                : 'Number range between 1 to 10'
+            }
+            touched={'rating'}
+            onBlur={handleBlur}
+          />
+        ))}
+      </div>
       <div className="flex flex-col md:flex-row gap-4">
         <Button
           text={talentID ? 'Save' : 'Add'}

@@ -24,6 +24,7 @@ export const talentUser = {
   amount: '',
   headline: '',
   experienceYear: '',
+  rating: '',
   avatar: '',
   user: {
     email: '',

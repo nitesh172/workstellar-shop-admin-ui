@@ -153,7 +153,7 @@ export type TalentProps = {
   id: string
   createdAt: string
   updatedAt: string
-  skills: { name: string; id: string }[]
+  skills: { name: string; id: string, rating: number }[]
   amount: {}
   paymentType: string
   headline: string
@@ -162,6 +162,7 @@ export type TalentProps = {
   level: string
   avatar: string
   user: UserProps
+  rating: number
 }
 
 export type TalentResponseProps = {

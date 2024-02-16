@@ -1,4 +1,4 @@
-import { object, ref, string } from 'yup'
+import { number, object, ref, string } from 'yup'
 
 export const loginSchema = object().shape({
   email: string()
@@ -36,6 +36,7 @@ export const talentSchema = object().shape({
   level: string().required("Please select level can't be empty."),
   designation: string().required("Please enter designation can't be empty."),
   avatar: string().required("Please select avatar is required."),
+  rating: number().required("Please give rating can't be empty.").min(1, "Number is greater than or equal to 1").max(5, "Number is less than or equal to 5"),
   user: object().shape({
     email: string()
       .email('Please enter valid email.')
