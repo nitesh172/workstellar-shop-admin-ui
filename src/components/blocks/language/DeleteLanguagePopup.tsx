@@ -58,8 +58,6 @@ const DeleteLanguagePopup: React.FC<PopupProps> = (props) => {
     if(!languages.length) {
       fetchLanguages('translation/languages/all')
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (

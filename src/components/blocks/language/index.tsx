@@ -58,8 +58,6 @@ const KeysTable = () => {
     !!access &&
       !searchTerm &&
       getkeys(`translation/keys?perPage=${limit}&currentPage=${page}`)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [limit, page, access, searchTerm])
 
   return (

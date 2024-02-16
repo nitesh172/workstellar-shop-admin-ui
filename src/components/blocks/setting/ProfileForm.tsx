@@ -79,8 +79,6 @@ const ProfileForm = () => {
         )?.isoCode || ''
       setStateCode(stateCode)
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser])
 
   useEffect(() => {
@@ -88,8 +86,6 @@ const ProfileForm = () => {
       router.push('/login')
       setPath('/settings')
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
   return (

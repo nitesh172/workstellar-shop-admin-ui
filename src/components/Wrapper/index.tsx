@@ -19,8 +19,6 @@ const Wrapper: React.FC<LayoutProps> = (props) => {
     if (!pathname) return
     const route = pathname.split('/')[1]
     setCurrentRoute(`/${route}`)
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router])
 
   useEffect(() => {

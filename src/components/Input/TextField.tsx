@@ -73,7 +73,9 @@ const TextField: React.FC<TextFieldProps> = (props) => {
           </span>
         )
       ) : !name && touched && error ? (
-        touched && error
+        <span className="text-xs text-[#F04438] px-2 block">
+          {touched && error}
+        </span>
       ) : null}
     </div>
   )
